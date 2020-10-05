@@ -1,0 +1,36 @@
+---
+title: "Ejercicio clase 4"
+output: html_notebook
+---
+Prendemos las librerías necesarias
+```{r}
+library(tidyverse)
+library(polAr)
+```
+Descargamos y guardamos como objeto a los resultados para las elecciones presidenciales de 2003
+```{r}
+arg <- get_election_data("arg", "presi", "gral", 2003) %>% 
+  get_names()
+```
+Filtramos los datos para conocer los resultados a nivel de la provincia de Tucumán
+```{r}
+arg %>% 
+  filter(name_prov == "TUCUMAN")
+```
+Creamos variable con el porcentaje de votos obtenido por cada lista y las ordenamos de menor a mayor
+```{r}
+arg %>% 
+  filter(name_prov == "TUCUMAN") %>% 
+  mutate(votostotal = sum(votos)) %>%  
+  mutate(votospct = (votos / votostotal) * 100) %>% 
+  arrange(votospct)
+```
+Creamos variable con la diferencia porcentual entre la lista que obtuvo la primera y segunda posición
+```{r}
+arg %>% 
+  filter(name_prov == "TUCUMAN") %>% 
+  mutate(votostotal = sum(votos)) %>%  
+  mutate(votospct = (votos / votostotal) * 100) %>% 
+  arrange(votospct) %>% 
+  mutate(dif = votospct[20] - votospct[19])
+```
